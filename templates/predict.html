@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+</head>
+
+<body>
+
+    <div class="d-flex flex-column min-vh-100">
+
+        <nav class="navbar navbar-expand-lg bg-primary border-primary border-bottom">
+            <div class="container-fluid my-1 mx-5">
+                <a class="navbar-brand text-light fw-bold fs-5" href="#">
+                    <i class="fa-solid fa-qrcode"></i> UPI FRAUD</a>
+                <button class="navbar-toggler shadow-none border-0" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa-solid fa-bars text-light"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-light fw-bold" aria-current="page" href="/upload">Upload</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white fw-bold" href="/forecast">Forecast</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white fw-bold text-decoration-underline link-offset-2 active"
+                                href="/predict">Predict</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white fw-bold " href="/transactions">Transactions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white fw-bold" href="/logout">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
+
+        {% if success %}
+        <div class="position-fixed top-0 toastae start-50 translate-middle-x p-3" style="z-index: 11">
+            <div id="liveToast1" class="toast bg-success bg-opacity-75 hide" role="alert" aria-live="assertive"
+                aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body ms-auto text-white">
+                        {{success}}
+                    </div>
+                    <button type="button" class="btn-close shadow-none btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="container bg-white my-4">
+
+            <div class="d-flex mt-5 mb-3">
+                <h3 class="text-primary-emphasis link-offset-1 text-decoration-underline flex-grow-1 flex-md-grow-0">
+                    Predict
+                </h3>
+            </div>
+
+            <form method="post" id="predictform" enctype="multipart/form-data">
+
+                <div class="row justify-content-center mb-3 mt-4 gx-5 gy-4">
+
+                    <div class="col-md-6 position-relative">
+                        <label for="uid" class="form-label">Transaction ID:</label>
+                        <input type="text" class="form-control shadow-none border-primary" name="uid" id="uid" readonly
+                            placeholder="Enter Transaction ID" value="{{uid}}">
+                        <div class="invalid-tooltip rounded-3 ">
+                            * Select Transaction ID
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 position-relative">
+                        <label for="date" class="form-label">Date:</label>
+                        <input type="date" class="form-control shadow-none border-primary" name="date" id="date"
+                            readonly>
+                        <div class="invalid-tooltip rounded-3 ">
+                            * Select Date
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 position-relative">
+                        <label for="time" class="form-label">Time:</label>
+                        <input type="time" class="form-control shadow-none border-primary" name="time" id="time"
+                            readonly>
+                        <div class="invalid-tooltip rounded-3 ">
+                            * Select Time
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 position-relative">
+                        <label for="sender" class="form-label">UPI Sender:</label>
+                        <input type="text" class="form-control shadow-none border-primary" name="sender" id="sender"
+                            placeholder="Enter UPI Sender">
+                        <div class="invalid-tooltip rounded-3 alertsender">
+                            * Select Valid UPI Sender
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 position-relative">
+                        <label for="receiver" class="form-label">UPI Receiver:</label>
+                        <input type="text" class="form-control shadow-none border-primary" name="receiver" id="receiver"
+                            placeholder="Enter UPI Receiver">
+                        <div class="invalid-tooltip rounded-3 alertreceiver">
+                            * Select Valid UPI Receiver
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6 position-relative">
+                        <label for="amount" class="form-label">Amount:</label>
+                        <input type="number" class="form-control shadow-none border-primary" name="amount" id="amount"
+                            min="0.01" step="0.01" placeholder="Enter Amount">
+                        <div class="invalid-tooltip rounded-3 ">
+                            * Select Amount
+                        </div>
+                    </div>
+
+                    <div class="w-100"></div>
+
+                    <div class="col-md-6 position-relative">
+                        <button type="reset" id="reset" class="btn btn-danger shadow-none w-100">Reset</button>
+                    </div>
+
+                    <div class="col-md-6 position-relative">
+                        <button type="submit" class="btn btn-primary shadow-none w-100">Submit</button>
+                    </div>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Fraud Alert</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5 class="fraudtext text-danger">
+
+                        </h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/js/bootstrap.js"></script>
+
+
+    <script>
+        $(function () {
+
+            $('.toast').toast('show');
+
+            function updateTime() {
+                $('#time').val(new Date().toTimeString().slice(0, 5));
+            }
+
+            function updateDate() {
+                $("#date").val(new Date().toISOString().split('T')[0]);
+            }
+
+            updateTime();
+
+            updateDate();
+
+            setInterval(updateTime, 10000);
+
+            $("#predictform").on("submit", function (e) {
+                debugger;
+
+                var date = $("#date").val()
+                var time = $("#time").val()
+                var sender = $("#sender").val()
+                var receiver = $("#receiver").val()
+                var amount = $("#amount").val()
+
+                var testemail = new RegExp("[a-z0-9]+@[a-z]+\.[a-z]{2,3}");
+                var testphone = new RegExp("^[6-9][0-9]{9}$");
+                var testaadhar = new RegExp("^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$");
+                var testusn = new RegExp("(?=(.*[a-zA-Z])(?=.*[0-9]))");
+                var testupi = new RegExp("^[a-zA-Z0-9._-]{2,256}@[a-zA-Z0-9]{2,64}$");
+
+
+
+                if (sender != "") {
+                    if (!testupi.test(sender)) {
+                        $(".alertsender").text("* Enter Valid UPI Sender");
+                        $("#sender").addClass("is-invalid");
+                        e.preventDefault();
+
+                    } else {
+                        $("#sender").removeClass("is-invalid");
+                    }
+                } else {
+                    $(".alertsender").text("* Enter UPI Sender");
+                    $("#sender").addClass("is-invalid");
+                    e.preventDefault();
+                }
+
+                if (receiver != "") {
+                    if (!testupi.test(receiver)) {
+                        $(".alertreceiver").text("* Enter Valid UPI Sender");
+                        $("#receiver").addClass("is-invalid");
+                        e.preventDefault();
+
+                    } else {
+                        $("#receiver").removeClass("is-invalid");
+                    }
+                } else {
+                    $(".alertreceiver").text("* Enter UPI Sender");
+                    $("#receiver").addClass("is-invalid");
+                    e.preventDefault();
+                }
+
+                if (date != "") {
+                    $("#date").removeClass("is-invalid");
+                } else {
+                    $("#date").addClass("is-invalid");
+                    e.preventDefault();
+                }
+
+                if (time != "") {
+                    $("#time").removeClass("is-invalid");
+                } else {
+                    $("#time").addClass("is-invalid");
+                    e.preventDefault();
+                }
+
+                if (amount != "") {
+                    $("#amount").removeClass("is-invalid");
+                } else {
+                    $("#amount").addClass("is-invalid");
+                    e.preventDefault();
+                }
+
+            })
+
+            $("input,textarea,select").on("keydown change", function () {
+                $(this).removeClass("is-invalid")
+            })
+
+            $("#reset").on("click", function () {
+                $("input,textarea,select").removeClass("is-invalid")
+                setTimeout(function () {
+                    updateDate();
+                    updateTime();
+                }, 50)
+            })
+
+            $("#sender").on("change", function () {
+
+                var value = $(this).val();
+
+                if (value != "") {
+                    $.ajax({
+                        url: '/check_fraud',
+                        type: 'POST',
+                        data: JSON.stringify({ email: value }),
+                        contentType: 'application/json',
+                        success: function (response) {
+                            if (response.exists) {
+                                var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+                                myModal.show();
+                                $(".fraudtext").text("Sender is involved in a fraud do you want to continue?")
+                            }
+                        },
+                        error: function (err) {
+                            console.log('AJAX error:', err);
+                        }
+                    });
+                }
+
+            })
+
+            $("#receiver").on("change", function () {
+
+                var value = $(this).val();
+
+                if (value != "") {
+                    $.ajax({
+                        url: '/check_fraud',
+                        type: 'POST',
+                        data: JSON.stringify({ email: value }),
+                        contentType: 'application/json',
+                        success: function (response) {
+                            if (response.exists) {
+                                var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+                                myModal.show();
+                                $(".fraudtext").text("Receiver is involved in a fraud do you want to continue?")
+                            }
+                        },
+                        error: function (err) {
+                            console.log('AJAX error:', err);
+                        }
+                    });
+                }
+
+            })
+
+        })
+    </script>
+
+</body>
+
+
+</html>
